@@ -3,12 +3,20 @@
 
 //Biblioteca
 
+//Apagar depois
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 
 #define ORDEM 4 // ordem maxima das paginas.
-#define TAM_MAXCHAVE 100 // tamanho maximo da chave(nome e data).
+#define TAM_MAXCHAVE 256 // tamanho maximo da chave(nome e data).
+
+//Função resposanvel por comparar um byte generico, ou seja, responsavel por comparar duas chaves
+// Return 1 se a > b, -1 se a < b e 0 se a == b; 
+typedef int (*FuncaoCompara)(const void *chaveA, const void *chaveB);
+
+//Função responsavel por dar imprimir o dado generico na tela, usando callback
+typedef void (*FuncaoImpressao)(const void *chave);
 
 typedef struct NoBplus{
 
@@ -21,7 +29,7 @@ typedef struct NoBplus{
 
     // Usado Apenas pelo no Interno;
 
-    char chave[ORDEM-1][TAM_MAXCHAVE]; // responsavel por armazenar todos os funcionarios que possuem na pagina analisada.
+    unsigned char chaves[ORDEM-1][TAM_MAXCHAVE]; // responsavel por armazenar todos os funcionarios que possuem na pagina analisada.
     
     long filhos[ORDEM]; // Guarda o endereço dos nos filhos de seu respectivo no interno.
 
@@ -32,5 +40,31 @@ typedef struct NoBplus{
     long proxFolha; // Guarda o endereço do proxima "pagina" folha.
 
 }NoBplus;
+
+typedef struct ArvoreBplus{
+
+    FILE *arquivo_indice; // Ponteiro do arquivo binario da arvore no disco.
+    long raiz; // Guarda a posição onde esta a raiz da arvore no disco.
+    size_t tamanho_chave; // Guarda o tamanho em bytes do tipo de dado usado como a chave;
+
+    // Ponteiros para as funções que mexem com os dados genericos.
+    FuncaoCompara comparar;
+    FuncaoImpressao imprime;
+}ArvoreBplus;
+
+//Inicializa a árvore, abre o arquivo em disco e configura as funções genéricas.
+ArvoreBplus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, FuncaoCompara comp, FuncaoImpressao impr);
+
+// Insere uma chave e o registra o ponteiro do mesmo na arvore em disco.
+void inserir(ArvoreBplus *arvore, const void *chave, long registro);
+
+// Busca o registro que desejamos e retorna o endereço do registro na árvore em disco.
+long buscar(ArvoreBplus *arvore, const void *chave);
+
+// Imprime a estrutura no terminal, usando callback de impressao.
+void imprimirEstrutura(ArvoreBplus *arvore);
+
+// fechar a arvore de forma correta.
+void fechaArvore(ArvoreBplus *arvore);
 
 #endif
