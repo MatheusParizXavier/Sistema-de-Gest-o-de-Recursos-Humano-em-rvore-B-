@@ -62,7 +62,7 @@ void inserir(ArvoreBPlus *arvore, const void *chave, long registro);
 long buscar(ArvoreBPlus *arvore, const void *chave);
 
 // Imprime a estrutura no terminal, usando callback de impressao.
-void imprimirEstrutura(ArvoreBPlus *arvore);
+void imprimie_chave(ArvoreBPlus *arvore);
 
 // fechar a arvore de forma correta.
 void fechaArvore(ArvoreBPlus *arvore);
