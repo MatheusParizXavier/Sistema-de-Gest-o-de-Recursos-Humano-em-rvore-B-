@@ -46,7 +46,7 @@ typedef struct ArvoreBPlus{
     FILE *arquivo_indice; // Ponteiro do arquivo binario da arvore no disco.
     long raiz; // Guarda a posição onde esta a raiz da arvore no disco.
     size_t tamanho_chave; // Guarda o tamanho em bytes do tipo de dado usado como a chave;
-
+    size_t tamanho_registro;
     // Ponteiros para as funções que mexem com os dados genericos.
     FuncaoCompara comparar;
     FuncaoImpressao imprime;
