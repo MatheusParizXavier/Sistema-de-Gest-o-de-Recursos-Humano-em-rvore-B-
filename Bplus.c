@@ -42,7 +42,7 @@ ArvoreBPlus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, Fun
     arvore->comparar = comp;
     arvore->imprime = impr;
 
-    // Tenta abrir par aleitura e escrita se falhar tentamos com "wb+"
+    // Tenta abrir para leitura e escrita se falhar tentamos com "wb+"
     arvore->arquivo_indice = fopen(caminho_arquivo, "rb+");
     if(arvore->arquivo_indice == NULL){
         arvore->arquivo_indice = fopen(caminho_arquivo, "wb+");

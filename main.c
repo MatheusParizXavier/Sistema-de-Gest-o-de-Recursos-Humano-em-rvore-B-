@@ -32,5 +32,11 @@ int main () {
     int opcao;
 
     // Inicializar a Árvore B+ em disco
-    // 
+    ArvoreBPlus *arvore = criar_arvore();
+
+    if (arvore == NULL) {
+        printf("Erro ao iniciar o arquivo da Árvore B+ em disco.\n");
+        return 1;
+    }
+    
 }
