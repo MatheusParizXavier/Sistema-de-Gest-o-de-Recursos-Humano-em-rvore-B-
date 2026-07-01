@@ -18,7 +18,7 @@ typedef int (*FuncaoCompara)(const void *chaveA, const void *chaveB);
 //Função responsavel por dar imprimir o dado generico na tela, usando callback
 typedef void (*FuncaoImpressao)(const void *chave);
 
-typedef struct NoBplus{
+typedef struct NoBPlus{
 
 
     // Usado por todos os Nos.
@@ -39,9 +39,9 @@ typedef struct NoBplus{
 
     long proxFolha; // Guarda o endereço do proxima "pagina" folha.
 
-}NoBplus;
+}NoBPlus;
 
-typedef struct ArvoreBplus{
+typedef struct ArvoreBPlus{
 
     FILE *arquivo_indice; // Ponteiro do arquivo binario da arvore no disco.
     long raiz; // Guarda a posição onde esta a raiz da arvore no disco.
@@ -50,21 +50,21 @@ typedef struct ArvoreBplus{
     // Ponteiros para as funções que mexem com os dados genericos.
     FuncaoCompara comparar;
     FuncaoImpressao imprime;
-}ArvoreBplus;
+}ArvoreBPlus;
 
 //Inicializa a árvore, abre o arquivo em disco e configura as funções genéricas.
-ArvoreBplus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, FuncaoCompara comp, FuncaoImpressao impr);
+ArvoreBPlus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, FuncaoCompara comp, FuncaoImpressao impr);
 
 // Insere uma chave e o registra o ponteiro do mesmo na arvore em disco.
-void inserir(ArvoreBplus *arvore, const void *chave, long registro);
+void inserir(ArvoreBPlus *arvore, const void *chave, long registro);
 
 // Busca o registro que desejamos e retorna o endereço do registro na árvore em disco.
-long buscar(ArvoreBplus *arvore, const void *chave);
+long buscar(ArvoreBPlus *arvore, const void *chave);
 
 // Imprime a estrutura no terminal, usando callback de impressao.
-void imprimirEstrutura(ArvoreBplus *arvore);
+void imprimirEstrutura(ArvoreBPlus *arvore);
 
 // fechar a arvore de forma correta.
-void fechaArvore(ArvoreBplus *arvore);
+void fechaArvore(ArvoreBPlus *arvore);
 
 #endif
