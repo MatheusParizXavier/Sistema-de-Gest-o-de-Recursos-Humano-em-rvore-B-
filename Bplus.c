@@ -36,9 +36,12 @@ long aloca_novaPagina(FILE *arq){
     return pagina;
 }
 
-ArvoreBPlus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, FuncaoCompara comp, FuncaoImpressao impr){
+ArvoreBPlus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, size_t tamanho_registro, FuncaoCompara comp, FuncaoImpressao impr){
     ArvoreBPlus *arvore = (ArvoreBPlus *)malloc(sizeof(ArvoreBPlus));
+    if(arvore == NULL) return NULL;
+
     arvore->tamanho_chave = tamanho_chave;
+    arvore->tamanho_registro = tamanho_registro;
     arvore->comparar = comp;
     arvore->imprime = impr;
 
@@ -47,6 +50,8 @@ ArvoreBPlus *criar_arvore(const char *caminho_arquivo, size_t tamanho_chave, Fun
     if(arvore->arquivo_indice == NULL){
         arvore->arquivo_indice = fopen(caminho_arquivo, "wb+");
         arvore->raiz = -1; // aqui a arvore começa vazia.
+
+        fwrite(&arvore->raiz, sizeof(long), 1, arvore->arquivo_indice);
     }else{/*Se o arquivo exista, a raiz vai estar no inicio*/
         // ATENÇÃO TALVEZ TEREMOS QUE VOLTAR AQUI.
         fseek(arvore->arquivo_indice, 0, SEEK_SET);
@@ -90,6 +95,26 @@ long buscar(ArvoreBPlus *arvore, const void *chave){
         // Passamos o ponteiro dos bytes genericos para nossa função callback
         while(i < pagina_atual.qtdChave && arvore->comparar(chave, pagina_atual.chaves[i]) > 0){
             i++;
+        }
+
+        if(pagina_atual.folha){
+            // se for uma folha, verficamos se a chave exite.
+            if(i < pagina_atual.qtdChave && arvore->comparar(chave, pagina_atual.chaves[i]) == 0){
+                return pagina_atual.registro[i];
+            }
+            else{
+                return -1; // chave nao existe
+            }
+        }else{
+            /*Se for uma pagina descemos para sua pagina filha
+              O indice aponta para o filho, caso a busca der menor ele ira para esquerda
+              , caso contrario vai para direita*/
+            
+            //Caso haja impate, ele vai para direita.
+            if( i < pagina_atual.qtdChave && arvore->comparar(chave, pagina_atual.chaves[i]) == 0){
+                i++;
+            }
+            atual = pagina_atual.filhos[i];
         }
     }
 }
