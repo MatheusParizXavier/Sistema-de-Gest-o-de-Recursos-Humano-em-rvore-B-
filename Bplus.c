@@ -118,3 +118,33 @@ long buscar(ArvoreBPlus *arvore, const void *chave){
         }
     }
 }
+
+void inserir(ArvoreBPlus *arvore, const void *chave, long registro){
+    // CASO 1: Arvore vazia
+
+    if(arvore->raiz == -1){
+        long novo = aloca_novaPagina(arvore->arquivo_indice);
+        NoBPlus novaRaiz;
+        ler_no(arvore->arquivo_indice, novo, &novaRaiz);
+
+        novaRaiz.folha = 1; // A primeira raiz tambem é uma folha.
+        novaRaiz.qtdChave = 1;
+        memcpy(novaRaiz.chaves[0], chave, arvore->tamanho_chave); // copia os bytes genéricos
+        novaRaiz.registro[0] = registro;
+
+        escreve_no(arvore->arquivo_indice, novo, &novaRaiz);
+        arvore->raiz = novo;
+        return;
+    }
+
+    // // Variaveis para garantir que nao percamos a chave e o ponteiro caso seja necessario fazer cisao na raiz
+    // unsigned char chave_raiz[TAM_MAXCHAVE];
+    // long filhoDir = -1;
+
+    // int splitRaiz //= // função split aqui
+
+    // //if(splitRaiz){
+    // //    long
+    // //}
+
+}
